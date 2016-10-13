@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+</head>
+<body>
+
+  <button>GET LOCATION</button>
+
+  <div id="demo"></div>
+  <script src="jquery.js"></script>
+  <script>
+
+    var x = document.getElementById("demo");
+
+
+    $("button#pega_local").click(function(){
+
+
+      if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition);
+        } else {
+            x.innerHTML = "Geolocation is not supported by this browser.";
+        }
+    });
+
+
+    function showPosition(position) {
+        var lat = position.coords.latitude;
+        var lng = position.coords.longitude;
+
+        /*$("#demo").text(lat+" - "+lng);*/
+
+        $.get("https://maps.googleapis.com/maps/api/geocode/json?address="+lat+","+lng+"&key=AIzaSyBtClF2NyqzWzSHSMH1Ifk459K5k6kycQw", function(data){
+          result = data;
+          $("#demo").text(data.results["0"].formatted_address);
+        });
+
+    }
+  </script>
+    <!--<script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBtClF2NyqzWzSHSMH1Ifk459K5k6kycQw&callback=initMap">
+    </script>-->
+  
+</body>
+</html>
