@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+</head>
+<body>
+
+  <form onsubmit="return false;">
+    <input type="text" name="origem" id="origem" placeholder="Origem"><br>
+    <input type="text" name="destino" id="destino" placeholder="Destino"><br>
+  </form>
+
+  <br>
+
+  <button id="calc">Calcular distância</button>
+
+  <br>
+
+  <div id="result-box"><h1></h1></div>
+
+
+  <script src="jquery.js"></script>
+  <script>
+    $(document).ready(function(){
+
+      $("#calc").click(function(){ 
+
+        var values = $("form").serialize().replace(/%20/g,'%2B');
+
+        console.log(values);
+
+        $.get("recebe.php?"+values, function(data){
+
+          var result = $.parseJSON(data);
+          var status = result.rows["0"].elements["0"].status;
+          var result_box = $("#result-box h1");
+          console.log(result);
+
+          if(status != "ZERO_RESULTS" && status != "NOT_FOUND"){
+            var distancia = result.rows["0"].elements["0"].distance.text;
+            result_box.text(distancia+" - "+ result.rows["0"].elements["0"].duration.text);
+          }else{
+            result_box.text("Sem resultados");
+          }
+          
+        });
+
+      });
+      
+    });
+  </script>
+</body>
+</html>

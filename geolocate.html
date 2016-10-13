@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Geolocation</title>
+</head>
+<body>
+
+  <p style="display:none;"></p>
+
+  <form id="form">
+    <input type="text" placeholder="Endereço" id="endereco">
+  </form>
+
+  <button id="get_json">Pegar JSON</button>
+
+  
+  <h2>Endereços próximos (20km):</h2>
+  
+  <div id="enderecos_prox"></div>
+
+  <script src="jquery.js"></script>
+  <script>
+    $(document).ready(function(){
+
+      var places = ["Rua Eliane Araújo Neves"
+                     ,"Av. Paulista"
+                    ,"Rua Yago"
+                    ];
+
+      var arrCords = [];            
+
+/*      for(i=0;i< places.length; i++){
+
+        var count = i;
+        $.ajax({
+          url: "https://maps.googleapis.com/maps/api/geocode/json?address="+places[i]+"&key=AIzaSyDYMGIYeqUR3rtv4PjF-QLItzeW6a1MW-c",
+          context: document.body
+        }).done(function(data) {
+
+          arrCords.push({endereco: data.results[0].formatted_address, lat: data.results[0].geometry.location.lat, lng: data.results[0].geometry.location.lng});
+   
+        });
+        
+      }
+*/
+
+      $("#get_json").click(function(){
+
+        var endereco = $("#endereco").val();
+
+        $.get("https://maps.googleapis.com/maps/api/distancematrix/json?origins=Vancouver+BC|Seattle&destinations=San+Francisco|Victoria+BC&mode=bicycling&language=fr-FR&key=AIzaSyAP72-WD6HYYJ8IaGDRyMssxOo9IDUosog", function(data){
+            console.log(data);
+        });
+
+       /* $.ajax({
+              url: "https://maps.googleapis.com/maps/api/distancematrix/json?origins=Vancouver+BC|Seattle&destinations=San+Francisco|Victoria+BC&mode=bicycling&language=fr-FR&key=AIzaSyCwHLr9LBzw36xVch9SuXy47lQEg8kFXiw",
+              type: "GET",   
+              dataType: 'jsonp',
+              cache: false,
+              success: function(response){                          
+                  console.log(response);                   
+              }           
+          });  */  
+      });
+
+    });
+  </script>
+  
+</body>
+</html>
