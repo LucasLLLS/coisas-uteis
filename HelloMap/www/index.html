@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+</head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<body>
+
+  <form onsubmit="return false;">
+    <input type="text" name="origem" id="origem" placeholder="Origem"><button id="pega_local">Minha localização</button><br>
+   <!--  <input type="text" name="destino" id="destino" placeholder="Destino"><br> -->
+  </form>
+
+  <br>
+
+  Limite de distância <input type="range" name="raio" id="raio" min="0" max="1000"> <span id="raio_val"></span>km
+
+  <br><br>
+  
+  <button id="calc">Mostrar endereços próximos</button>
+
+  <br>
+
+  <div id="result-box"><ul></ul></div>
+
+  <script src="jquery.js"></script>
+  <script src="cordova.js"></script>
+  <script type="text/javascript" src="js/index.js"></script>
+  <script>
+    $(document).ready(function(){
+
+      $("#raio").on("click mousemove change", function(){
+        $("span#raio_val").text($(this).val());
+      });
+
+      var places = ["Rua Eliane Araújo Neves"
+                    ,"Avenida Paulista"
+                    ,"Rua Yago"
+                    ,"Rua Brandino Francisco Genovesi"
+                    ];
+
+
+      /*FUNÇÃO PARA PEGAR LOCAL ATUAL*/
+      $("button#pega_local").click(function(){
+
+
+      if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition);
+        } else {
+            x.innerHTML = "Geolocation is not supported by this browser.";
+        }
+    });
+
+
+    function showPosition(position) {
+        var lat = position.coords.latitude;
+        var lng = position.coords.longitude;
+
+        /*$("#demo").text(lat+" - "+lng);*/
+
+        $.get("https://maps.googleapis.com/maps/api/geocode/json?address="+lat+","+lng+"&key=AIzaSyBtClF2NyqzWzSHSMH1Ifk459K5k6kycQw", function(data){
+          result = data;
+          $("#origem").val(data.results["0"].formatted_address);
+        });
+    }
+
+    /*FUNÇÃO DE CÁLCULO DE DISTÂNCIA*/
+    $("#calc").click(function(){
+
+      var destString = "";
+      var origem = $("form").serialize().replace(/%20/g,'%2B');
+
+      for(i=0; i<places.length; i++){     
+
+        if(i==0){
+          destString = destString + places[i];
+        }else{
+          destString = destString + "|" +places[i];
+        }
+        
+      }
+
+      destString = destString.replace(/ /g,'%2B');
+
+
+      $.get("https://lucaslellis.com/testes/maps/recebe.php?destinos="+destString+"&"+origem, function(data){
+
+        var result = $.parseJSON(data);
+        var results = result.rows["0"].elements;
+
+        console.log(results);
+
+        $("#result-box ul").html("");
+
+        for(i=0; i<results.length; i++){
+
+          if(results[i].status != "ZERO_RESULTS" && results[i].status != "NOT_FOUND"){
+            var distancia = results[i].distance.value
+            var raio = $("#raio").val() * 1000;
+            if(distancia<raio){
+              $("#result-box ul").append("<li>"+result.destination_addresses[i]+"</li>");
+            }
+
+          }
+        }
+
+        /*var status = result.rows["0"].elements["0"].status;
+        var result_box = $("#result-box h1");
+        console.log(result);*/
+
+        /*if(status != "ZERO_RESULTS" && status != "NOT_FOUND"){
+          var distancia = result.rows["0"].elements["0"].distance.value;
+          result_box.text(distancia+" - "+ result.rows["0"].elements["0"].duration.text);
+        }else{
+          result_box.text("Sem resultados");
+        }*/
+        
+      });
+
+    });
+      
+    });
+  </script>
+
+  
+</body>
+</html>

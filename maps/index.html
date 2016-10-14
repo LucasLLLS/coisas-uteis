@@ -14,7 +14,7 @@
 
   <br>
 
-  Limite de distância <input type="range" name="raio" id="raio" min="0" max="800"> <span id="raio_val"></span>km
+  Limite de distância <input type="range" name="raio" id="raio" min="0" max="1000"> <span id="raio_val"></span>km
 
   <br><br>
   
@@ -83,7 +83,7 @@
       destString = destString.replace(/ /g,'%2B');
 
 
-      $.get("recebe.php?destinos="+destString+"&origem="+origem, function(data){
+      $.get("https://lucaslellis.com/testes/maps/recebe.php?destinos="+destString+"&origem="+origem, function(data){
 
         var result = $.parseJSON(data);
 
@@ -91,6 +91,8 @@
         var results = result.rows["0"].elements;
 
         console.log(results);
+
+        $("#result-box ul").html("");
 
         for(i=0; i<results.length; i++){
 
