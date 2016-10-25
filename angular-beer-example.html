@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-br" data-ng-app="app">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body data-ng-controller="MainController as main">
+
+	<h1>{{ main.titulo }}</h1>
+
+	<ul data-ng-repeat="beer in main.beers">
+		<li>{{beer.marca}} - {{beer.preco}}</li>
+	</ul>
+
+	<hr>
+
+	<h3>add beer</h3>
+
+	Brand: <input type="text" data-ng-model="main.beer.marca"><br>
+	Price: <input type="text" data-ng-model="main.beer.preco"><br>
+
+	<button data-ng-click="main.addBeer(main.beer)">ADD</button>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+	<script>
+		angular.module('app', [])
+		.controller('MainController', MainController);
+
+		function MainController(){
+			vm = this;
+			vm.titulo = 'Título';
+			vm.beers = [
+				{marca:'Heineken', preco: 9.00}
+				,{marca: 'Budweiser', preco: 8.50}
+				,{marca: 'Skol', preco: 7.50}
+			];
+
+			vm.addBeer = addBeer;
+
+			function addBeer(beer){
+				var i;
+				for(i=0; i<vm.beers.length; i++){
+					
+					if(beer.marca == vm.beers[i].marca){
+						alert("Cerveja já está cadastrada");
+						return false;
+					}
+				}
+				vm.beers.push(angular.copy(beer));
+			}
+		}
+	</script>
+</body>
+</html>

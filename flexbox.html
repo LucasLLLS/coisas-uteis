@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+	    <title>Exemplo Flexbox</title>
+	    <meta charset="utf-8">
+	</head>
+
+	<style>
+		
+		.main {
+		    display: -webkit-flex;
+		    display: flex;
+		    width:500px;
+		    background:#EFEFEF;
+		    height:500px;
+		    display: -webkit-flex;
+		    display: flex;
+
+		}
+		 
+		/** Para deixar uma corzinha de fundo nos divs filhos **/
+		.main div {
+		    background:#CCC;
+		    margin-right:10px;
+		    -webkit-flex:1 1 auto;
+    		flex:1 1 auto;
+		}
+
+		.main div.primeiroDiv {-webkit-order:2;}
+		.main div.segundoDiv {-webkit-order:3;}
+		.main div.terceiroDiv {-webkit-order:1;}
+
+		@media only screen and(max-width: 767px){
+
+			.main {
+			-webkit-flex-flow: column;
+    		flex-flow: column;
+			}
+		}
+		
+	</style>
+	<body>
+ 
+		<div class="main">
+		    <div class="primeiroDiv">Um div</div>
+		    <div class="segundoDiv">Segundo div</div>
+		    <div class="terceiroDiv">Terceiro Div</div>
+		</div>
+ 
+	</body>
+</html>
