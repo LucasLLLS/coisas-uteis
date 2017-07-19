@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+
+<body>
+
+<button>Go!</button>
+
+<div id="flickr">
+	
+</div>
+
+
+<script
+  src="https://code.jquery.com/jquery-3.2.1.min.js"
+  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  crossorigin="anonymous"></script>
+
+<script>
+
+$(document).ready(trazFotos);
+
+
+function trazFotos(){
+
+	var user_id = '59824792@N06';
+	var api_key = 'f30e515199d1e2c3ed9f5dfb141fc28a';
+	var user_name = 'rzleytheshoots_jr'
+
+	$.ajax({
+		url : 'https://api.flickr.com/services/rest/?&method=flickr.people.getPublicPhotos&api_key='+api_key+'&user_id='+user_id+'&format=json',
+		dataType: 'jsonp'
+	});
+}
+
+	
+function jsonFlickrApi(json) {
+
+
+  for(var i=0; i<6; i++){
+
+  	var img = json.photos.photo[i];
+  	console.log(img);
+
+  	$("<img />").attr("src", 'http://farm'+img.farm+'.staticflickr.com/'+img.server+'/'+img.id+'_'+img.secret+'.jpg').appendTo("#flickr");
+  }
+  
+};
+
+
+</script>
+
+	
+</body>
+</html>
